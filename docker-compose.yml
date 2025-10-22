@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  stress-test:
+    build: .
+    image: stress-test:latest
+    container_name: stress-test-app
+    environment:
+      # Exemplo de como definir variáveis de ambiente se necessário
+      - GO_ENV=production
+    # Exemplo de execução com parâmetros padrão
+    # Sobrescreva os argumentos conforme necessário
+    command: ["--url=http://httpbin.org/get", "--requests=100", "--concurrency=10"]
+    
+  # Exemplo alternativo usando profiles para diferentes configurações de teste
+  stress-test-light:
+    build: .
+    image: stress-test:latest
+    container_name: stress-test-light
+    command: ["--url=http://httpbin.org/get", "--requests=50", "--concurrency=5"]
+    profiles:
+      - light
+    
+  stress-test-heavy:
+    build: .
+    image: stress-test:latest
+    container_name: stress-test-heavy
+    command: ["--url=http://httpbin.org/get", "--requests=1000", "--concurrency=50"]
+    profiles:
+      - heavy
+
